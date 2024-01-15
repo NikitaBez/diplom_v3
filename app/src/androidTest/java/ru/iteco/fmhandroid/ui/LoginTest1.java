@@ -43,57 +43,11 @@ public class LoginTest1 {
 
     @Test
     public void loginTest1() {
-        ViewInteraction textInputEditText = onView(
-                allOf(childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.login_text_input_layout),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText.perform(replaceText("login2"), closeSoftKeyboard());
+        onView(withId(R.id.login_text_input_layout)).perform(replaceText("login2"), closeSoftKeyboard());
+        onView(withId(R.id.password_text_input_layout)).perform(replaceText("password2"), closeSoftKeyboard());
+        onView(allOf(withId(R.id.enter_button), withText("Sign in"), isDisplayed())).perform(click());
 
-        ViewInteraction textInputEditText2 = onView(
-                allOf(childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.password_text_input_layout),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText2.perform(replaceText("password2"), closeSoftKeyboard());
-
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.enter_button), withText("Sign in"), withContentDescription("Save"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.RelativeLayout")),
-                                        1),
-                                2),
-                        isDisplayed()));
-        materialButton.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withText("News"),
-                        withParent(withParent(withId(R.id.container_list_news_include_on_fragment_main))),
-                        isDisplayed()));
-        textView.check(matches(withText("News")));
-    }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+        onView(allOf(withText("News"),
+                withId(R.id.container_list_news_include_on_fragment_main))).check(matches(isDisplayed()));
     }
 }
